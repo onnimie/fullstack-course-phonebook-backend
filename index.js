@@ -65,10 +65,29 @@ app.delete('/api/persons/:id', (request, response) => {
 app.post('/api/persons', (request, response) => {
     const p = request.body
     console.log(p)
-    const gen_id = Math.floor(Math.random()*100000)
-    const new_p = {...p, id: gen_id}
-    persons = persons.concat(new_p)
-    response.json(new_p)
+
+    if (!p.name || !p.number) {
+        response.status(400).json({
+            error: 'name or number is missing'
+        })
+    } else {
+
+        const already_in_list = persons.find(per => per.name === p.name)
+
+        if (already_in_list) {
+            
+            response.status(400).json({
+                error: 'name must be unique'
+            })
+
+        } else {
+
+            const gen_id = Math.floor(Math.random()*100000)
+            const new_p = {...p, id: gen_id}
+            persons = persons.concat(new_p)
+            response.json(new_p)
+        }
+    }
 })
 
 const PORT = 3001
