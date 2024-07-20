@@ -1,7 +1,9 @@
 const express = require('express')
+const morgan = require('morgan')
 const app = express()
 
 app.use(express.json())
+app.use(morgan('tiny'))
 
 let persons = [
       {
@@ -75,7 +77,7 @@ app.post('/api/persons', (request, response) => {
         const already_in_list = persons.find(per => per.name === p.name)
 
         if (already_in_list) {
-            
+
             response.status(400).json({
                 error: 'name must be unique'
             })
