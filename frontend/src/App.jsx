@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
 import phonebookService from './services/phonebookService'
 
 const Entry = (props) => {
@@ -149,8 +148,12 @@ const App = () => {
     if (window.confirm(`Delete ${name}?`)) {
       phonebookService.deletePhonebookEntry(id).then(res => {
         console.log(`Deleted person ${name}!`)
-        sendMessage(`Deleted entry for ${newName}!`)
+        sendMessage(`Deleted entry for ${name}!`)
         setPersons(persons.filter(p => p.id !== id))
+      }).
+      catch(err => {
+        sendError('Something went wrong trying to delete...')
+        console.log("Error with deletePhonebookEntry", err)
       })
     }
   }

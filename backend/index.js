@@ -75,7 +75,10 @@ app.get('/api/persons/:id', (request, response) => {
 
 app.delete('/api/persons/:id', (request, response) => {
     const id = request.params.id
+    //console.log(id)
     const p = persons.find(per => per.id === id)
+    //console.log(persons)
+    //console.log(p)
     if (!p) {
         response.status(404).end()
     } else {
@@ -105,7 +108,7 @@ app.post('/api/persons', (request, response) => {
         } else {
 
             const gen_id = Math.floor(Math.random()*100000)
-            const new_p = {...p, id: gen_id}
+            const new_p = {...p, id: gen_id.toString()}
             persons = persons.concat(new_p)
             response.json(new_p)
         }
