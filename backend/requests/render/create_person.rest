@@ -1,0 +1,7 @@
+POST https://fullstack-course-phonebook-backend.onrender.com/api/persons
+Content-Type: application/json
+
+{
+    "name": "Erkki Esimerkki",
+    "number": "02-02-02"
+}
