@@ -105,7 +105,7 @@ app.post('/api/persons', (request, response) => {
         })
     } else {
 
-        const already_in_list = persons.find(per => per.name === p.name)
+        /*const already_in_list = persons.find(per => per.name === p.name)
 
         if (already_in_list) {
 
@@ -119,7 +119,15 @@ app.post('/api/persons', (request, response) => {
             const new_p = {...p, id: gen_id.toString()}
             persons = persons.concat(new_p)
             response.json(new_p)
-        }
+        }*/
+      const person = new Person({
+        name: p.name,
+        number: p.number,
+      })
+
+      person.save().then(result => {
+          response.json(result)
+      })
     }
 })
 
