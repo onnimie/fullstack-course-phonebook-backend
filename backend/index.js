@@ -59,9 +59,12 @@ app.get('/', (request, response) => {
 })
 */
 
-app.get('/api/persons', (request, response) => {
+app.get('/api/persons', (request, response, next) => {
   Person.find({}).then(result => {
     response.json(result)
+    
+  }).catch(err => {
+    next(err)
   })
 })
 
@@ -81,52 +84,26 @@ app.get('/api/persons/:id', (request, response) => {
     }
 })
 
-app.delete('/api/persons/:id', (request, response) => {
+app.delete('/api/persons/:id', (request, response, next) => {
     const id = request.params.id
-    //console.log(id)
-    /*const p = persons.find(per => per.id === id)
-    //console.log(persons)
-    //console.log(p)
-    if (!p) {
-        response.status(404).end()
-    } else {
-        persons = persons.filter(per => per.id !== id)
-        response.status(204).end()
-    }*/
 
     Person.findByIdAndDelete(id).then(result => {
       response.status(204).end()
 
     }).catch(err => {
-      console.log(err)
+      next(err)
     })
 })
 
-app.post('/api/persons', (request, response) => {
+app.post('/api/persons', (request, response, next) => {
     const p = request.body
     console.log(p)
 
     if (!p.name || !p.number) {
-        response.status(400).json({
-            error: 'name or number is missing'
-        })
+        next({name: 'NoNameOrNumber', message: 'POST to /api/persons without name or number'})
+
     } else {
 
-        /*const already_in_list = persons.find(per => per.name === p.name)
-
-        if (already_in_list) {
-
-            response.status(400).json({
-                error: 'name must be unique'
-            })
-
-        } else {
-
-            const gen_id = Math.floor(Math.random()*100000)
-            const new_p = {...p, id: gen_id.toString()}
-            persons = persons.concat(new_p)
-            response.json(new_p)
-        }*/
       const person = new Person({
         name: p.name,
         number: p.number,
@@ -134,9 +111,30 @@ app.post('/api/persons', (request, response) => {
 
       person.save().then(result => {
           response.json(result)
+
+      }).catch(err => {
+        next(err)
       })
     }
 })
+
+
+const errorHandler = (error, request, response, next) => {
+  console.error(error.message)
+
+  if (error.name === 'CastError') {
+    return response.status(400).send({ error: 'malformatted id' })
+  }
+  if (error.name === 'NoNameOrNumber') {
+    return response.status(400).send({error: 'name or number is missing'})
+  }
+
+  next(error)
+}
+
+// tämä tulee kaikkien muiden middlewarejen ja routejen rekisteröinnin jälkeen!
+app.use(errorHandler)
+
 
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
