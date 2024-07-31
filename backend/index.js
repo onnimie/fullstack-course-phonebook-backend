@@ -62,7 +62,7 @@ app.get('/', (request, response) => {
 app.get('/api/persons', (request, response, next) => {
   Person.find({}).then(result => {
     response.json(result)
-    
+
   }).catch(err => {
     next(err)
   })
@@ -97,7 +97,7 @@ app.delete('/api/persons/:id', (request, response, next) => {
 
 app.post('/api/persons', (request, response, next) => {
     const p = request.body
-    console.log(p)
+    console.log('POST:', p)
 
     if (!p.name || !p.number) {
         next({name: 'NoNameOrNumber', message: 'POST to /api/persons without name or number'})
@@ -116,6 +116,19 @@ app.post('/api/persons', (request, response, next) => {
         next(err)
       })
     }
+})
+
+app.put('/api/persons/:id', (request, response, next) => {
+    const id = request.params.id
+    const p = request.body
+    console.log('PUT:', p)
+
+    Person.findByIdAndUpdate(id, p, {new: true}).then(updatedPerson => {
+      response.json(updatedPerson)
+
+    }).catch(err => {
+      next(err)
+    })
 })
 
 
