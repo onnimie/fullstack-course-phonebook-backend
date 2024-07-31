@@ -84,7 +84,7 @@ app.get('/api/persons/:id', (request, response) => {
 app.delete('/api/persons/:id', (request, response) => {
     const id = request.params.id
     //console.log(id)
-    const p = persons.find(per => per.id === id)
+    /*const p = persons.find(per => per.id === id)
     //console.log(persons)
     //console.log(p)
     if (!p) {
@@ -92,7 +92,14 @@ app.delete('/api/persons/:id', (request, response) => {
     } else {
         persons = persons.filter(per => per.id !== id)
         response.status(204).end()
-    }
+    }*/
+
+    Person.findByIdAndDelete(id).then(result => {
+      response.status(204).end()
+
+    }).catch(err => {
+      console.log(err)
+    })
 })
 
 app.post('/api/persons', (request, response) => {
