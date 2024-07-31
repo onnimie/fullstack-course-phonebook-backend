@@ -30,29 +30,6 @@ app.use(morgan(function (tokens, req, res) {
     
   }))
 
-let persons = [
-      {
-        "name": "Arto Hellas",
-        "number": "02020202",
-        "id": "1"
-      },
-      {
-        "name": "Ada Lovelace",
-        "number": "39-44-5323523",
-        "id": "2"
-      },
-      {
-        "name": "Dan Abramov",
-        "number": "12-43-234345",
-        "id": "3"
-      },
-      {
-        "name": "Mary Poppendieck",
-        "number": "39-23-6423122",
-        "id": "4"
-      }
-]
-
 /* USELESS NOW THAT WE SERVE index.html from dist when GETting /
 app.get('/', (request, response) => {
   response.send('<h1>Hello World!</h1>')
@@ -68,20 +45,29 @@ app.get('/api/persons', (request, response, next) => {
   })
 })
 
-app.get('/info', (request, response) => {
-    //console.log(response)
-    response.send(`<p>Phonebook has info for ${persons.length} people</p><p>${new Date()}</p>`)
+app.get('/info', (request, response, next) => {
+    Person.find({}).then(res => {
+      response.send(`<p>Phonebook has info for ${res.length} people</p><p>${new Date()}</p>`)
+
+    }).catch(err => {
+      next(err)
+    })
+    
 })
 
-app.get('/api/persons/:id', (request, response) => {
+app.get('/api/persons/:id', (request, response, next) => {
     const id = request.params.id
-    //console.log(id)
-    const p = persons.find(per => per.id === id)
-    if (!p) {
+
+    Person.findById(id).then(res => {
+      if (!res) {
         response.status(404).end()
-    } else {
-        response.json(p)
-    }
+      } else {
+        response.json(res)
+      }
+
+    }).catch(err => {
+      next(err)
+    })
 })
 
 app.delete('/api/persons/:id', (request, response, next) => {
