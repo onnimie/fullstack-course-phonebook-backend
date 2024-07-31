@@ -22,7 +22,7 @@ const updatePhonebookEntry = (newEntryObj) => {
     const updatedObj = {...newEntryObj}
     const p = axios.put(
         phonebookURL + `/${newEntryObj.id}`,
-        newEntryObj
+        updatedObj
     )
     return p.then(res => res.data)
 }
