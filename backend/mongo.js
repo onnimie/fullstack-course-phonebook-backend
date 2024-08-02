@@ -25,27 +25,27 @@ const nameArg = process.argv[3]
 const numberArg = process.argv[4]
 
 if (nameArg && numberArg) {
-    // add a new entry to the database
+  // add a new entry to the database
 
-    const person = new Person({
-        name: nameArg,
-        number: numberArg,
-    })
+  const person = new Person({
+    name: nameArg,
+    number: numberArg,
+  })
 
-    person.save().then(result => {
-        console.log(`added ${nameArg} number ${numberArg} to phonebook`)
-        mongoose.connection.close()
-    })
+  person.save().then(__result => {
+    console.log(`added ${nameArg} number ${numberArg} to phonebook`)
+    mongoose.connection.close()
+  })
 
 } else {
-    // output the list of entries in the database
+  // output the list of entries in the database
 
-    Person.find({}).then(result => {
-        result.forEach(person => {
-          console.log(person.name, person.number)
-        })
-        mongoose.connection.close()
+  Person.find({}).then(result => {
+    result.forEach(person => {
+      console.log(person.name, person.number)
     })
+    mongoose.connection.close()
+  })
 }
 
 
