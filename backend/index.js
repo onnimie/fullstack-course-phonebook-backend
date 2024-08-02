@@ -85,23 +85,17 @@ app.post('/api/persons', (request, response, next) => {
     const p = request.body
     console.log('POST:', p)
 
-    if (!p.name || !p.number) {
-        next({name: 'NoNameOrNumber', message: 'POST to /api/persons without name or number'})
+    const person = new Person({
+      name: p.name,
+      number: p.number,
+    })
 
-    } else {
+    person.save().then(result => {
+        response.json(result)
 
-      const person = new Person({
-        name: p.name,
-        number: p.number,
-      })
-
-      person.save().then(result => {
-          response.json(result)
-
-      }).catch(err => {
-        next(err)
-      })
-    }
+    }).catch(err => {
+      next(err)
+    })
 })
 
 app.put('/api/persons/:id', (request, response, next) => {
@@ -123,9 +117,6 @@ const errorHandler = (error, request, response, next) => {
 
   if (error.name === 'CastError') {
     return response.status(400).send({ error: 'malformatted id' })
-  }
-  if (error.name === 'NoNameOrNumber') {
-    return response.status(400).send({error: 'name or number is missing'})
   }
   if (error.name === 'ValidationError') {
     return response.status(400).send({error: error.message})
