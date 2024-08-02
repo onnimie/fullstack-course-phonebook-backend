@@ -130,7 +130,7 @@ const App = () => {
             setNewNumber('')
             setPersons(persons.map(person => person.id !== p.id ? person : updatedEntry))
           })
-          .catch(err => {
+          .catch(__err => {
             sendError(`Information of ${newName} has already been removed from the server.`)
           })
       }
@@ -150,7 +150,7 @@ const App = () => {
 
   const deleteEntry = (name, id) => {
     if (window.confirm(`Delete ${name}?`)) {
-      phonebookService.deletePhonebookEntry(id).then(res => {
+      phonebookService.deletePhonebookEntry(id).then(__res => {
         console.log(`Deleted person ${name}!`)
         sendMessage(`Deleted entry for ${name}!`)
         setPersons(persons.filter(p => p.id !== id))
