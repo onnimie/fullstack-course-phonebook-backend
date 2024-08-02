@@ -141,6 +141,10 @@ const App = () => {
         setNewName('')
         setNewNumber('')
       })
+      .catch(err => {
+        console.log(err.response.data)
+        sendError(err.response.data.error)
+      })
     }
   }
 
