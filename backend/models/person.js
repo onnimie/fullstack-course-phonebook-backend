@@ -20,9 +20,21 @@ const personSchema = new mongoose.Schema({
     name: {
       type: String,
       minlength: 3,
-      required: true
+      required: [true, 'entry name is required!'],
     },
-    number: String,
+    number: {
+      type: String,
+      minlength: 8,
+      validate: {
+        validator: function(v) {
+          let hasPhoneNumber = /(\d{2}-\d{5})|(\d{3}-\d{4})/.test(v)
+          let hasExtraLetters = /([^0-9]+[0-9]*-)|(-[0-9]*[^0-9]+)/.test(v)
+          return hasPhoneNumber && !(hasExtraLetters);
+        },
+        message: props => `${props.value} is not a valid phone number!`
+      },
+      required: [true, 'entry number is required!'],
+    },
 })
 
 personSchema.set('toJSON', {
