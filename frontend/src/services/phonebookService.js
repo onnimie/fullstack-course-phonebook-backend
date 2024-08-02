@@ -3,28 +3,28 @@ import axios from 'axios'
 const phonebookURL = '/api/persons'
 
 const getPhonebookAll = () => {
-    const p = axios.get(phonebookURL)
-    return p.then(res => res.data)
+  const p = axios.get(phonebookURL)
+  return p.then(res => res.data)
 }
 
 const addPhonebookEntry = (name, number) => {
-    const obj = {name, number}
-    // let the server create the id
-    const p = axios.post(phonebookURL, obj)
-    return p.then(res => res.data)
+  const obj = { name, number }
+  // let the server create the id
+  const p = axios.post(phonebookURL, obj)
+  return p.then(res => res.data)
 }
 
 const deletePhonebookEntry = id => {
-    return axios.delete(phonebookURL + `/${id}`)
+  return axios.delete(phonebookURL + `/${id}`)
 }
 
 const updatePhonebookEntry = (newEntryObj) => {
-    const updatedObj = {...newEntryObj}
-    const p = axios.put(
-        phonebookURL + `/${newEntryObj.id}`,
-        updatedObj
-    )
-    return p.then(res => res.data)
+  const updatedObj = { ...newEntryObj }
+  const p = axios.put(
+    phonebookURL + `/${newEntryObj.id}`,
+    updatedObj
+  )
+  return p.then(res => res.data)
 }
 
 

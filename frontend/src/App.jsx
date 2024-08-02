@@ -31,11 +31,11 @@ const EntryForm = (props) => {
     <form onSubmit={addEntry}>
       <div>
         name: <input onChange={handleNameInputChange}
-        value={newName} />
+          value={newName} />
       </div>
       <div>
         number: <input onChange={handleNumberInputChange}
-        value={newNumber} />
+          value={newNumber} />
       </div>
       <div>
         <button type="submit">add</button>
@@ -44,7 +44,7 @@ const EntryForm = (props) => {
   )
 }
 
-const Message = ({msg}) => {
+const Message = ({ msg }) => {
   if (!msg) {
     return <></>
   } else {
@@ -56,7 +56,7 @@ const Message = ({msg}) => {
   }
 }
 
-const Error = ({msg}) => {
+const Error = ({ msg }) => {
   if (!msg) {
     return <></>
   } else {
@@ -93,7 +93,7 @@ const App = () => {
   }
 
   useEffect(() => {
-    console.log("effect")
+    console.log('effect')
     phonebookService.getPhonebookAll().then(personsRes => {
       console.log('promise fulfilled')
       setPersons(personsRes)
@@ -104,7 +104,7 @@ const App = () => {
     console.log(event.target.value)
     setNewName(event.target.value)
   }
-  
+
   const handleNumberInputChange = (event) => {
     console.log(event.target.value)
     setNewNumber(event.target.value)
@@ -122,7 +122,7 @@ const App = () => {
       if (window.confirm(`${newName} is already added to the phonebook. Replace the old number with the new one?`)) {
         const p = persons.find(p => p.name === newName)
         phonebookService
-          .updatePhonebookEntry({...p, number: newNumber})
+          .updatePhonebookEntry({ ...p, number: newNumber })
           .then(updatedEntry => {
             console.log(`Updated entry for ${newName}!`)
             sendMessage(`Updated entry for ${newName}!`)
@@ -141,10 +141,10 @@ const App = () => {
         setNewName('')
         setNewNumber('')
       })
-      .catch(err => {
-        console.log(err.response.data)
-        sendError(err.response.data.error)
-      })
+        .catch(err => {
+          console.log(err.response.data)
+          sendError(err.response.data.error)
+        })
     }
   }
 
@@ -155,10 +155,10 @@ const App = () => {
         sendMessage(`Deleted entry for ${name}!`)
         setPersons(persons.filter(p => p.id !== id))
       }).
-      catch(err => {
-        sendError('Something went wrong trying to delete...')
-        console.log("Error with deletePhonebookEntry", err)
-      })
+        catch(err => {
+          sendError('Something went wrong trying to delete...')
+          console.log('Error with deletePhonebookEntry', err)
+        })
     }
   }
 
@@ -182,9 +182,9 @@ const App = () => {
         numberValue={newNumber} />
 
       <h2>Numbers</h2>
-      
+
       <ul>
-        {filteredPersons.map(p => 
+        {filteredPersons.map(p =>
           <Entry key={p.name} name={p.name} number={p.number} id={p.id} deleteEntry={deleteEntry} />
         )}
       </ul>
